@@ -1,0 +1,29 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "init",
+			"type": "shell",
+			"command": "bash ${workspaceRoot}/script/init.sh",
+			"options": {
+				"cwd": "${workspaceRoot}/img/"
+			}
+		},
+		{
+			"label": "运行",
+			"type": "shell",
+			"command": "qemu-system-x86_64 -m 2048 hd60M.img",
+			"options": {
+				"cwd": "${workspaceRoot}/img/"
+			},
+			"dependsOn":["init"]
+			// "problemMatcher": [],
+			// "detail": "CMake template configure task",
+			// "group": {
+			// 	"kind": "build",
+			// 	"isDefault": true
+			// }
+		}
+		
+	]
+}
