@@ -5,8 +5,7 @@ project(kernel LANGUAGES C)
 
 # ENABLE_LANGUAGE(ASM_NASM)
 
-
-set(CMAKE_EXE_LINKER_FLAGS "-m elf_i386  -Ttext=0x7c00 -e main")
+set(CMAKE_EXE_LINKER_FLAGS "-m elf_i386  -Ttext=0x8000 -e main")
 set(CMAKE_C_LINK_EXECUTABLE "${LINKER_TOOL} <OBJECTS> ${CMAKE_EXE_LINKER_FLAGS} -o ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf")
 
 
@@ -19,7 +18,7 @@ set(CMAKE_ASM_NASM_SOURCE_FILE_EXTENSIONS nasm asm S)
 set(CMAKE_ASM_NASM_LINK_EXECUTABLE "${LINKER_TOOL} <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
 # set(CMAKE_ASM_NASM_FLAGS "-f bin")
 ENABLE_LANGUAGE(ASM_NASM)
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${PROJECT_NAME}/asm_bin)
+# set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${PROJECT_NAME}/asm_bin)
 
 include_directories(
     ./
@@ -32,7 +31,7 @@ include_directories(
 # set_target_properties(aaw2 PROPERTIES LINK_FLAGS "-f macho")
 # set_target_properties(aaw2 PROPERTIES SUFFIX ".bin")
 # set_target_properties(aaw2 PROPERTIES LINK_FLAGS "-f macho")
-add_executable(${PROJECT_NAME} naskfunc.S bootpack.c)
+add_executable(${PROJECT_NAME} bootpack.c naskfunc.S)
 # set_target_properties(aaw2 PROPERTIES LINKER_LANGUAGE NASM)
 # set_target_properties(aaw2 PROPERTIES LINK_FLAGS "-o my_output_file")
 

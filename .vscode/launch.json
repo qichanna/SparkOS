@@ -5,17 +5,71 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(lldb) 启动",
+            "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
-            "program": "输入程序名称，例如 ${workspaceFolder}/a.out",
+            "program": "${workspaceRoot}/build/src/init/init.elf",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceRoot}",
             "environment": [],
             "externalConsole": false,
-            "MIMode": "lldb"
+            "MIMode": "gdb",
+            "miDebuggerPath": "x86_64-elf-gdb",
+            "miDebuggerServerAddress": "127.0.0.1:1234",
+            "targetArchitecture": "x86",
+            "stopAtConnect": true,
+            "serverLaunchTimeout": 30000,
+            // 启动gdb之前，做些准备：写映像文件、启动qemu
+            // "windows": {
+            //     "preLaunchTask": "调试准备", // 仅在windows下可自动运行
+            // },
+            // "linux": {
+            //     "preLaunchTask": "调试准备", // 仅在windows下可自动运行
+            //     "miDebuggerPath": "gdb", // linux下的特殊配置
+            // },
+            "customLaunchSetupCommands": [],
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "将反汇编风格设置为 Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                },
+                // 设置体系结构: i8086，方便以16位方式进行反汇编
+                // {
+                //     "description": "设置体系结构",
+                //     "text": "-gdb-set arch i8086",
+                //     "ignoreFailures": true
+                // }
+            ],
+            // gdb连接后的设置
+            "postRemoteConnectCommands": [
+                {
+                    "description": "加载mbr符号文件",
+                    "text": "-file-symbol-file ${workspaceRoot}/build/src/init/init.elf",
+                    "ignoreFailures": false
+                },
+                // {
+                //     "description": "加载mbr_loader符号文件",
+                //     "text": "-file-symbol-file ${workspaceRoot}/build/src/init/init_loader.elf",
+                //     "ignoreFailures": false
+                // },
+                {
+                    "description": "加载mbr_loader符号文件",
+                    "text": "-file-symbol-file ${workspaceRoot}/build/src/kernel/kernel.elf",
+                    "ignoreFailures": false
+                },
+                {
+                    "description": "运行至0x7c00",
+                    "text": "-exec-until *0x7c00",
+                    "ignoreFailures": false
+                },
+            ],
         }
-
     ]
 }

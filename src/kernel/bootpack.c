@@ -10,9 +10,20 @@ int main(void)
 	// 	write_mem8(i, 15); /* MOV BYTE [i],15 */
 	// }
 
+	int a = 1;
+	int b = 2;
+
 write_mem8();
+
+int c = 3;
+int d = 4;
 
 	// for (;;) {
 	// 	io_hlt();
 	// }
+}
+
+int test(void){
+	int c = 9;
+	return 0;
 }

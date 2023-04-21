@@ -1,6 +1,7 @@
-%include "init.S"
-[BITS 16]
-SECTION .MBR
+%include "head.S"
+BITS 16
+section .text
+_start:
    mov ax,cs      
    mov ds,ax
    mov es,ax
@@ -39,8 +40,8 @@ SECTION .MBR
 	 
    mov eax,LOADER_START_SECTOR	 
    mov bx,LOADER_BASE_ADDR       
-   mov cx,5			 
-   call rd_disk_m_32		
+   mov cx,1		 
+   call rd_disk_m_16	
 
 ;    mov esp,0x900
    jmp LOADER_BASE_ADDR

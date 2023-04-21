@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.23)
 
 # include(CTest)
 # enable_testing()
@@ -21,7 +21,9 @@ set(CMAKE_C_FLAGS "-g -c -O0 -m32 -fno-pie -fno-stack-protector -fno-asynchronou
 # set(CMAKE_ASM_SOURCE_FILE_EXTENSIONS "S")
 
 
-set(CMAKE_ASM_NASM_COMPILER nasm)
+# set(CMAKE_ASM_NASM_COMPILER nasm)
+# set(CMAKE_ASM_NASM_OBJECT_FORMAT elf)
+set(CMAKE_ASM_NASM_FLAGS "-g")
 # set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -f elf -Werror -vstart=0x1000")
 # set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -vstart")
 # set(CMAKE_ASM_NASM_SOURCE_FILE_EXTENSIONS "S")
@@ -40,9 +42,12 @@ set(READELF_TOOL "${TOOL_PREFIX}readelf")
 project(SparkOS LANGUAGES C)  
 # enable_language(ASM_NASM)
 
+# execute_process(COMMAND ls WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+
 # include_directories(
 #     ${PROJECT_SOURCE_DIR}/SparkOS
 # )
 
-add_subdirectory(./SparkOS/init)
-add_subdirectory(./SparkOS/kernel)
+add_subdirectory(./src/init)
+add_subdirectory(./src/kernel)

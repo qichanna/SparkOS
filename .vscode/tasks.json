@@ -2,9 +2,9 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "init",
+			"label": "write_img",
 			"type": "shell",
-			"command": "bash ${workspaceRoot}/script/init.sh",
+			"command": "bash ${workspaceRoot}/script/write_img.sh",
 			"options": {
 				"cwd": "${workspaceRoot}/img/"
 			}
@@ -12,11 +12,11 @@
 		{
 			"label": "运行",
 			"type": "shell",
-			"command": "qemu-system-x86_64 -m 2048 hd60M.img",
+			"command": "bash ${workspaceRoot}/script/run.sh",
 			"options": {
 				"cwd": "${workspaceRoot}/img/"
 			},
-			"dependsOn":["init"]
+			"dependsOn":["write_img"]
 			// "problemMatcher": [],
 			// "detail": "CMake template configure task",
 			// "group": {
