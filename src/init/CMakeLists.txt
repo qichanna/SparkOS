@@ -1,7 +1,7 @@
 
 project(init LANGUAGES C)
 
-set(CMAKE_EXE_LINKER_FLAGS "-m elf_i386 -Ttext 0x7c00")
+set(CMAKE_EXE_LINKER_FLAGS "-m elf_i386 -Ttext=0x7c00 -e main")
 set(CMAKE_C_LINK_EXECUTABLE "${LINKER_TOOL} <OBJECTS> ${CMAKE_EXE_LINKER_FLAGS} -g -o ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf")
 
 
@@ -23,7 +23,7 @@ set(CMAKE_ASM_NASM_LINK_EXECUTABLE "${LINKER_TOOL} <LINK_FLAGS> <OBJECTS> -o <TA
 
 enable_language(ASM_NASM)
 include_directories(
-    ./
+        .
 )
 
 # add_compile_options(-I ${CMAKE_CURRENT_SOURCE_DIR}/ )
@@ -39,20 +39,21 @@ include_directories(
 #         )
 
 add_executable(${PROJECT_NAME} init.S)
-# set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Ttext 0x7c00")
+#add_executable(${PROJECT_NAME} init.S)
+#set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Ttext 0x7c00")
 add_executable(${PROJECT_NAME}_loader loader.S)
 set_target_properties(${PROJECT_NAME}_loader PROPERTIES LINK_FLAGS "-Ttext 0x900")
 set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".elf")
 set_target_properties(${PROJECT_NAME}_loader PROPERTIES SUFFIX ".elf")
-set(CMAKE_ALWAYS_MAKE_BUILD true)
+
 # bin文件生成，写入到image目录下
 add_custom_command(TARGET ${PROJECT_NAME}
-                   POST_BUILD
-                   COMMAND sh -x ${CMAKE_SOURCE_DIR}/script/clean_img.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                      COMMAND ${OBJDUMP_TOOL} -x -dS ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf > ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.txt
-                      COMMAND ${OBJDUMP_TOOL} -x -dS ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_loader.elf > ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_loader.txt
-                      COMMAND ${READELF_TOOL} -a ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf > ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_elf.txt
-                      COMMAND ${READELF_TOOL} -a ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_loader.elf > ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_loader_elf.txt
-                      COMMAND ${OBJCOPY_TOOL} -O binary ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf ${CMAKE_SOURCE_DIR}/img/${PROJECT_NAME}.bin
-                      COMMAND ${OBJCOPY_TOOL} -O binary ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_loader.elf ${CMAKE_SOURCE_DIR}/img/${PROJECT_NAME}_loader.bin
+        POST_BUILD
+        COMMAND sh -x ${CMAKE_SOURCE_DIR}/script/clean_img.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMAND ${OBJDUMP_TOOL} -x -dS ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf > ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.txt
+        COMMAND ${OBJDUMP_TOOL} -x -dS ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_loader.elf > ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_loader.txt
+        COMMAND ${READELF_TOOL} -a ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf > ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_elf.txt
+        COMMAND ${READELF_TOOL} -a ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_loader.elf > ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_loader_elf.txt
+        COMMAND ${OBJCOPY_TOOL} -O binary ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf ${CMAKE_SOURCE_DIR}/img/${PROJECT_NAME}.bin
+        COMMAND ${OBJCOPY_TOOL} -O binary ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_loader.elf ${CMAKE_SOURCE_DIR}/img/${PROJECT_NAME}_loader.bin
 )

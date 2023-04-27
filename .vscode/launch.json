@@ -50,17 +50,17 @@
             // gdb连接后的设置
             "postRemoteConnectCommands": [
                 {
-                    "description": "加载mbr符号文件",
+                    "description": "加载init符号文件",
                     "text": "-file-symbol-file ${workspaceRoot}/build/src/init/init.elf",
                     "ignoreFailures": false
                 },
                 {
-                    "description": "加载mbr_loader符号文件",
+                    "description": "加载loader符号文件",
                     "text": "add-symbol-file ${workspaceRoot}/build/src/init/init_loader.elf",
                     "ignoreFailures": false
                 },
                 {
-                    "description": "加载mbr_loader符号文件",
+                    "description": "加载kernel符号文件",
                     "text": "add-symbol-file ${workspaceRoot}/build/src/kernel/kernel.elf",
                     "ignoreFailures": false
                 },

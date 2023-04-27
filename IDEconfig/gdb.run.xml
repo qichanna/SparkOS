@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="gdb" type="CLion_Remote" version="1" remoteCommand="localhost:1234" symbolFile="" sysroot="">
+    <debugger toolchainName="Default" />
+    <method v="2" />
+  </configuration>
+</component>

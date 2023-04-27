@@ -21,7 +21,7 @@ ENABLE_LANGUAGE(ASM_NASM)
 # set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${PROJECT_NAME}/asm_bin)
 
 include_directories(
-    ./
+        ./
 )
 
 # file(GLOB C_LIST "*.S")
@@ -31,7 +31,7 @@ include_directories(
 # set_target_properties(aaw2 PROPERTIES LINK_FLAGS "-f macho")
 # set_target_properties(aaw2 PROPERTIES SUFFIX ".bin")
 # set_target_properties(aaw2 PROPERTIES LINK_FLAGS "-f macho")
-add_executable(${PROJECT_NAME} bootpack.c naskfunc.S)
+add_executable(${PROJECT_NAME} kernel_entry.c utils/utils.c utils/utils.S)
 # set_target_properties(aaw2 PROPERTIES LINKER_LANGUAGE NASM)
 # set_target_properties(aaw2 PROPERTIES LINK_FLAGS "-o my_output_file")
 
@@ -44,8 +44,8 @@ add_executable(${PROJECT_NAME} bootpack.c naskfunc.S)
 
 # bin文件生成，写入到image目录下
 add_custom_command(TARGET ${PROJECT_NAME}
-                   POST_BUILD
-                   COMMAND ${OBJDUMP_TOOL} -x -d -S -m i8086 ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf > ${PROJECT_NAME}_dis.txt
-                   COMMAND ${READELF_TOOL} -a ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf > ${PROJECT_NAME}_elf.txt
-                   COMMAND ${OBJCOPY_TOOL} -O binary ${PROJECT_NAME}.elf ${CMAKE_SOURCE_DIR}/img/${PROJECT_NAME}.bin
-)
+        POST_BUILD
+        COMMAND ${OBJDUMP_TOOL} -x -d -S -m i8086 ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf > ${PROJECT_NAME}_dis.txt
+        COMMAND ${READELF_TOOL} -a ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf > ${PROJECT_NAME}_elf.txt
+        COMMAND ${OBJCOPY_TOOL} -O binary ${PROJECT_NAME}.elf ${CMAKE_SOURCE_DIR}/img/${PROJECT_NAME}.bin
+        )
