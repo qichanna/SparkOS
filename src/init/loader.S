@@ -90,9 +90,11 @@ mov gs, ax
 ;
 mov eax, KERNEL_START_SECTOR        ; kernel.bin所在的扇区号
 mov ebx, KERNEL_BIN_BASE_ADDR       ; 从磁盘读出后，写入到ebx指定的地址
-mov ecx, 1       ; 读入的扇区数
+mov ecx, 2       ; 读入的扇区数
 
+;pushfd
 call rd_disk_m_32
+;popfd
 jmp KERNEL_BIN_BASE_ADDR
 
 
@@ -142,29 +144,65 @@ out dx,al
 
 ;;;;;; 至此,硬盘控制器便从指定的lba地址(eax)处,读出连续的cx个扇区,下面检查硬盘状态,不忙就能把这cx个扇区的数据读出来
 
+
+
 ;第4步：检测硬盘状态
-.not_ready:		   ;测试0x1f7端口(status寄存器)的的BSY位
-  ;同一端口,写时表示写入命令字,读时表示读入硬盘状态
+;.not_ready:		   ;测试0x1f7端口(status寄存器)的的BSY位
+;  ;同一端口,写时表示写入命令字,读时表示读入硬盘状态
+;  nop
+;  in al,dx
+;  and al,0x88	   ;第4位为1表示硬盘控制器已准备好数据传输,第7位为1表示硬盘忙
+;  cmp al,0x08
+;  jnz .not_ready	   ;若未准备好,继续等。
+;
+;;第5步：从0x1f0端口读数据
+;mov ax, di	   ;以下从硬盘端口读数据用insw指令更快捷,不过尽可能多的演示命令使用,
+;		   ;在此先用这种方法,在后面内容会用到insw和outsw等
+;
+;mov dx, 256	   ;di为要读取的扇区数,一个扇区有512字节,每次读入一个字,共需di*512/2次,所以di*256
+;mul dx
+;mov cx, ax
+;mov dx, 0x1f0
+;
+;.go_on_read:
+;  in ax,dx
+;  mov [ebx], ax
+;  add ebx, 2
+;loop .go_on_read
+
+
+
+
+
+
+
+
+
+.read_sector
+ mov dx,0x1f7
+.not_ready:
   nop
   in al,dx
   and al,0x88	   ;第4位为1表示硬盘控制器已准备好数据传输,第7位为1表示硬盘忙
   cmp al,0x08
   jnz .not_ready	   ;若未准备好,继续等。
 
-;第5步：从0x1f0端口读数据
-mov ax, di	   ;以下从硬盘端口读数据用insw指令更快捷,不过尽可能多的演示命令使用,
-		   ;在此先用这种方法,在后面内容会用到insw和outsw等
+  mov ax, 1
+  mov dx, 256
+  mul dx
+  mov cx, ax
+  mov dx, 0x1f0
 
-mov dx, 256	   ;di为要读取的扇区数,一个扇区有512字节,每次读入一个字,共需di*512/2次,所以di*256
-mul dx
-mov cx, ax
-mov dx, 0x1f0
+  .go_on_read:
+    in ax,dx
+    mov [ebx], ax
+    add ebx, 2
+  loop .go_on_read
 
-.go_on_read:
-  in ax,dx
-  mov [ebx], ax
-  add ebx, 2
-loop .go_on_read
+  sub di,1
+  cmp di,0
+jnz .read_sector
+
 ret
 
 GDT_BASE:  dd    0x00000000

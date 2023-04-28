@@ -31,7 +31,7 @@ include_directories(
 # set_target_properties(aaw2 PROPERTIES LINK_FLAGS "-f macho")
 # set_target_properties(aaw2 PROPERTIES SUFFIX ".bin")
 # set_target_properties(aaw2 PROPERTIES LINK_FLAGS "-f macho")
-add_executable(${PROJECT_NAME} kernel_entry.c utils/utils.c utils/utils.S)
+add_executable(${PROJECT_NAME} kernel_entry.c utils/utils.c utils/utils.h utils/utils.S)
 # set_target_properties(aaw2 PROPERTIES LINKER_LANGUAGE NASM)
 # set_target_properties(aaw2 PROPERTIES LINK_FLAGS "-o my_output_file")
 
