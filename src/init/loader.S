@@ -84,10 +84,14 @@ mov eax, 10000b
 mov ds, ax
 mov es, ax
 mov ss, ax
-mov esp,0x900
+mov esp,0x8000
+mov ebp,0x8000
 mov fs, ax
 mov gs, ax
-;
+
+;开启SSE
+call enable_sse
+
 mov eax, KERNEL_START_SECTOR        ; kernel.bin所在的扇区号
 mov ebx, KERNEL_BIN_BASE_ADDR       ; 从磁盘读出后，写入到ebx指定的地址
 mov ecx, 2       ; 读入的扇区数
@@ -97,6 +101,16 @@ call rd_disk_m_32
 ;popfd
 jmp KERNEL_BIN_BASE_ADDR
 
+
+enable_sse:
+mov eax, cr0
+and ax, 0xFFFB		;clear coprocessor emulation CR0.EM
+or ax, 0x2			;set coprocessor monitoring  CR0.MP
+mov cr0, eax
+mov eax, cr4
+or ax, 3 << 9		;set CR4.OSFXSR and CR4.OSXMMEXCPT at the same time
+mov cr4, eax
+ret
 
 
 rd_disk_m_32:
@@ -178,7 +192,7 @@ out dx,al
 
 
 
-.read_sector
+.read_sector:
  mov dx,0x1f7
 .not_ready:
   nop

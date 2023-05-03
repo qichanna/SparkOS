@@ -21,7 +21,7 @@ extern void io_hlt(void);
 #define COL8_848484		15
 
 void set_color_panel();
-void boxfill8(unsigned char*, int , unsigned char, int, int, int, int);
+void draw(unsigned char*, int , unsigned char, int, int, int, int);
 
 void main(void)
 {
@@ -41,22 +41,22 @@ void main(void)
     xsize = 320;
     ysize = 200;
 
-    boxfill8(vram, xsize, COL8_008484,  0,         0,          xsize -  1, ysize - 29);
-    boxfill8(vram, xsize, COL8_C6C6C6,  0,         ysize - 28, xsize -  1, ysize - 28);
-    boxfill8(vram, xsize, COL8_FFFFFF,  0,         ysize - 27, xsize -  1, ysize - 27);
-    boxfill8(vram, xsize, COL8_C6C6C6,  0,         ysize - 26, xsize -  1, ysize -  1);
+    draw(vram, xsize, COL8_008484,  0,         0,          xsize -  1, ysize - 29);
+    draw(vram, xsize, COL8_C6C6C6,  0,         ysize - 28, xsize -  1, ysize - 28);
+    draw(vram, xsize, COL8_FFFFFF,  0,         ysize - 27, xsize -  1, ysize - 27);
+    draw(vram, xsize, COL8_C6C6C6,  0,         ysize - 26, xsize -  1, ysize -  1);
 
-     boxfill8(vram, xsize, COL8_FFFFFF,  3,         ysize - 24, 59,         ysize - 24);
-    boxfill8(vram, xsize, COL8_FFFFFF,  2,         ysize - 24,  2,         ysize -  4);
-    boxfill8(vram, xsize, COL8_848484,  3,         ysize -  4, 59,         ysize -  4);
-    boxfill8(vram, xsize, COL8_848484, 59,         ysize - 23, 59,         ysize -  5);
-    boxfill8(vram, xsize, COL8_000000,  2,         ysize -  3, 59,         ysize -  3);
-    boxfill8(vram, xsize, COL8_000000, 60,         ysize - 24, 60,         ysize -  3);
+    draw(vram, xsize, COL8_FFFFFF,  3,         ysize - 24, 59,         ysize - 24);
+    draw(vram, xsize, COL8_FFFFFF,  2,         ysize - 24,  2,         ysize -  4);
+    draw(vram, xsize, COL8_848484,  3,         ysize -  4, 59,         ysize -  4);
+    draw(vram, xsize, COL8_848484, 59,         ysize - 23, 59,         ysize -  5);
+    draw(vram, xsize, COL8_000000,  2,         ysize -  3, 59,         ysize -  3);
+    draw(vram, xsize, COL8_000000, 60,         ysize - 24, 60,         ysize -  3);
 
-    boxfill8(vram, xsize, COL8_848484, xsize - 47, ysize - 24, xsize -  4, ysize - 24);
-    boxfill8(vram, xsize, COL8_848484, xsize - 47, ysize - 23, xsize - 47, ysize -  4);
-    boxfill8(vram, xsize, COL8_FFFFFF, xsize - 47, ysize -  3, xsize -  4, ysize -  3);
-    boxfill8(vram, xsize, COL8_FFFFFF, xsize -  3, ysize - 24, xsize -  3, ysize -  3);
+    draw(vram, xsize, COL8_848484, xsize - 47, ysize - 24, xsize -  4, ysize - 24);
+    draw(vram, xsize, COL8_848484, xsize - 47, ysize - 23, xsize - 47, ysize -  4);
+    draw(vram, xsize, COL8_FFFFFF, xsize - 47, ysize -  3, xsize -  4, ysize -  3);
+    draw(vram, xsize, COL8_FFFFFF, xsize -  3, ysize - 24, xsize -  3, ysize -  3);
 
 
     while (1);
@@ -66,7 +66,7 @@ void main(void)
 }
 
 void set_color_panel(){
-    char* rgb = {
+    static unsigned char rgb_table[16*3] = {
             0x00, 0x00, 0x00,
             0xff, 0x00, 0x00,
             0x00, 0xff, 0x00,
@@ -85,9 +85,7 @@ void set_color_panel(){
             0x84, 0x84, 0x84
     };
 
-//    int eflags;
-//    eflags = read_eflags();
-//    cli();
+    static char *rgb = rgb_table;
     //0x03c8端口设置0号调色板
     outb(0x03c8,0);
     for (int i = 0; i < 16; ++i) {
@@ -95,12 +93,10 @@ void set_color_panel(){
         outb(0x03c9,*(rgb++));
         outb(0x03c9,*(rgb++));
     }
-    int c = 0;
-//    restore_eflags(eflags);
     return;
 }
 
-void boxfill8(unsigned char *vram, int xsize, unsigned char c, int x0, int y0, int x1, int y1)
+void draw(unsigned char *vram, int xsize, unsigned char c, int x0, int y0, int x1, int y1)
 {
     int x, y;
     for (y = y0; y <= y1; y++) {
