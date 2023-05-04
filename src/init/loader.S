@@ -90,11 +90,11 @@ mov fs, ax
 mov gs, ax
 
 ;开启SSE
-call enable_sse
+;call enable_sse
 
 mov eax, KERNEL_START_SECTOR        ; kernel.bin所在的扇区号
 mov ebx, KERNEL_BIN_BASE_ADDR       ; 从磁盘读出后，写入到ebx指定的地址
-mov ecx, 2       ; 读入的扇区数
+mov ecx,4    ; 读入的扇区数
 
 ;pushfd
 call rd_disk_m_32

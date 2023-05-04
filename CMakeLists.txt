@@ -4,7 +4,7 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 set(CMAKE_SYSTEM_NAME Generic)
 set(TOOL_PREFIX  "x86_64-elf-")
 set(CMAKE_C_COMPILER "${TOOL_PREFIX}gcc")
-set(CMAKE_C_FLAGS "-g -c -O0 -m32 -fno-pie -fno-stack-protector -fno-asynchronous-unwind-tables")
+set(CMAKE_C_FLAGS "-g -c -O0 -mno-sse -m32 -fno-pie -fno-stack-protector -fno-asynchronous-unwind-tables")
 set(CMAKE_ASM_NASM_FLAGS "-g")
 set(CMAKE_ASM_NASM_SOURCE_FILE_EXTENSIONS nasm asm S)
 
@@ -17,6 +17,10 @@ set(OBJDUMP_TOOL "${TOOL_PREFIX}objdump")
 set(READELF_TOOL "${TOOL_PREFIX}readelf")
 
 project(SparkOS LANGUAGES C)
+
+include_directories(
+        ${PROJECT_SOURCE_DIR}/src
+)
 
 add_subdirectory(./src/init)
 add_subdirectory(./src/kernel)

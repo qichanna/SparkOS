@@ -20,9 +20,6 @@ set(CMAKE_ASM_NASM_LINK_EXECUTABLE "${LINKER_TOOL} <LINK_FLAGS> <OBJECTS> -o <TA
 ENABLE_LANGUAGE(ASM_NASM)
 # set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${PROJECT_NAME}/asm_bin)
 
-include_directories(
-        ./
-)
 
 # file(GLOB C_LIST "*.S")
 # add_executable(${PROJECT_NAME} mbr.S init.S)
@@ -31,7 +28,8 @@ include_directories(
 # set_target_properties(aaw2 PROPERTIES LINK_FLAGS "-f macho")
 # set_target_properties(aaw2 PROPERTIES SUFFIX ".bin")
 # set_target_properties(aaw2 PROPERTIES LINK_FLAGS "-f macho")
-add_executable(${PROJECT_NAME} kernel_entry.c utils/utils.c utils/utils.h utils/utils.S)
+file(GLOB_RECURSE all_files "*.c" "*.h" "*.S")
+add_executable(${PROJECT_NAME} kernel_entry.c ${all_files})
 # set_target_properties(aaw2 PROPERTIES LINKER_LANGUAGE NASM)
 # set_target_properties(aaw2 PROPERTIES LINK_FLAGS "-o my_output_file")
 

@@ -1,6 +1,6 @@
 //__asm__(".code16gcc");
 #include "utils/utils.h"
-extern void io_hlt(void);
+#include "int/int.h"
 
 
 #define COL8_000000		0
@@ -20,18 +20,18 @@ extern void io_hlt(void);
 #define COL8_008484		14
 #define COL8_848484		15
 
+void init();
 void set_color_panel();
 void draw(unsigned char*, int , unsigned char, int, int, int, int);
 
 void main(void)
 {
-//    cli();
     set_color_panel();
 //     char* p = 0xa0000;
 //     for (int i = 0; i <= 0xaffff; i++) {
 //     	write_mem8(i, 15);
 //     	write_mem8(i, i & 0x0f);
-//        *(p + i) = 10;
+//        *(p + i) = 0;
 //        *(p + i) = i & 0x0f;
 //     }
 
@@ -57,16 +57,15 @@ void main(void)
     draw(vram, xsize, COL8_848484, xsize - 47, ysize - 23, xsize - 47, ysize -  4);
     draw(vram, xsize, COL8_FFFFFF, xsize - 47, ysize -  3, xsize -  4, ysize -  3);
     draw(vram, xsize, COL8_FFFFFF, xsize -  3, ysize - 24, xsize -  3, ysize -  3);
-
-
-    while (1);
+    init();
+        sti();
      for (;;) {
-     	io_hlt();
+//     	io_hlt();
      }
 }
 
 void set_color_panel(){
-    static unsigned char rgb_table[16*3] = {
+    unsigned char rgb_table[16*3] = {
             0x00, 0x00, 0x00,
             0xff, 0x00, 0x00,
             0x00, 0xff, 0x00,
@@ -85,13 +84,13 @@ void set_color_panel(){
             0x84, 0x84, 0x84
     };
 
-    static char *rgb = rgb_table;
+    char *rgb = rgb_table;
     //0x03c8端口设置0号调色板
     outb(0x03c8,0);
     for (int i = 0; i < 16; ++i) {
-        outb(0x03c9,*(rgb++));
-        outb(0x03c9,*(rgb++));
-        outb(0x03c9,*(rgb++));
+        outb(0x03c9,*(rgb++)/4);
+        outb(0x03c9,*(rgb++)/4);
+        outb(0x03c9,*(rgb++)/4);
     }
     return;
 }
@@ -104,4 +103,8 @@ void draw(unsigned char *vram, int xsize, unsigned char c, int x0, int y0, int x
             vram[y * xsize + x] = c;
     }
     return;
+}
+
+void init(){
+    init_interupt();
 }

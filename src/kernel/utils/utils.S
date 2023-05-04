@@ -1,5 +1,5 @@
 global write_mem8,io_hlt,out_byte
-global _io_cli,_io_load_eflags,_io_store_eflags
+global _io_cli,_io_sti,_io_load_eflags,_io_store_eflags
 
 io_hlt:
 		hlt
@@ -22,6 +22,10 @@ out_byte:
 _io_cli:
 		CLI
 		RET
+
+_io_sti:
+	    STI
+	    RET
 
 _io_load_eflags:
 		PUSHFD

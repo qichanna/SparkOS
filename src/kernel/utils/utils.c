@@ -1,6 +1,7 @@
 #include "utils.h"
 extern void out_byte(int,int);
 extern void _io_cli();
+extern void _io_sti();
 extern int _io_load_eflags();
 extern void _io_store_eflags(int);
 
@@ -10,6 +11,10 @@ void outb(int port,int data){
 
 void cli(){
     _io_cli();
+}
+
+void sti(){
+    _io_sti();
 }
 
 int read_eflags(){
