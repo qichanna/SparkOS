@@ -3,3 +3,8 @@ build
 cmake-build-debug
 img
 .idea
+script
+bochs-2.6
+bochsout.txt
+bochs.disk
+bochs_img
