@@ -1,5 +1,5 @@
 #include "int.h"
-#include "../utils/utils.h"
+#include "kernel/utils/utils.h"
 
 // ICW1    OCW2  OCW3  (主从，0X20, 0XA0)
 // OCW1    ICW2 ICW3 ICW4    (主从，0X21, 0XA1)
@@ -7,6 +7,7 @@
 // 0 ~ 19 为处理器内部固定的异常类型， 20~31 是 Intel保留的
 
 static IDT_DESC idt_desc[IDT_COUNT];
+void* idt_function[IDT_COUNT];
 
 void init_interupt(){
     initIDT();
@@ -14,8 +15,10 @@ void init_interupt(){
 }
 
 void initIDT(){
+    // interrupt_exception();
     for (int i = 0; i < IDT_COUNT; ++i){
-        set_idt_desc(idt_desc + i,(uint16)clock,8,0,0x8e,(uint32)clock >> 16);
+        idt_function[i] = interrupt_entry;
+        // set_idt_desc(idt_desc + i,(uint16)interrupt_exception,8,0,0x8e,(uint32)interrupt_exception >> 16);
     }
 
     struct{
@@ -56,5 +59,10 @@ void initPic(){
 }
 void clock(){
     int a = 0;
-    while (1);
+    // while (1);
+}
+
+void interrupt_entry(IDT_INFO info){
+    int a = info.gs;
+    int b = 0;
 }
