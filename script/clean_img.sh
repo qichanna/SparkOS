@@ -1,4 +1,4 @@
-#rm -rf ./img/*
+rm -rf ./img/*
 # if [ "$(ls -a ./img)" ]; then
 #    rm -rf ./img/*
 # else

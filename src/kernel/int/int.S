@@ -1,24 +1,73 @@
-extern idt_function
+%define NO_ERROR_CODE nop
+%define ZERO_CODE push 0
+extern idt_real_function
+extern clock
+
+section .data
+global vec_fun
+vec_fun:
+
 %macro IDT_FUNCTION 2
-    global interrupt_exception_%1
+section .text
     interrupt_exception_%1:
+    %2
     pushad
     push ds
     push es
     push fs
     push gs
 
-    call [idt_function+%1*4]
+    mov al,0x20                   ; 中断结束命令EOI 0010000,1表示中断结束
+    out 0xa0,al                   ; OCW2 主从，0X20, 0XA0
+    out 0x20,al
 
-    pop gs 
-    pop fs 
-    pop es 
+    push %1 ;压入中断号
+    call [idt_real_function+%1*4]
+    add esp,4  ;跳过中断号
+
+    pop gs
+    pop fs
+    pop es
     pop ds
-    popad 
+    popad
+    add esp,4 ;跳过错误码
     iret
+section .data
+    dd interrupt_exception_%1
 %endmacro
 
-IDT_FUNCTION 0x00,0
-IDT_FUNCTION 0x01,0
-IDT_FUNCTION 0x02,0
-IDT_FUNCTION 0x03,0
+IDT_FUNCTION 0,ZERO_CODE
+IDT_FUNCTION 1,ZERO_CODE
+IDT_FUNCTION 2,ZERO_CODE
+IDT_FUNCTION 3,ZERO_CODE
+IDT_FUNCTION 4,ZERO_CODE
+IDT_FUNCTION 5,ZERO_CODE
+IDT_FUNCTION 6,ZERO_CODE
+IDT_FUNCTION 7,ZERO_CODE
+IDT_FUNCTION 8,NO_ERROR_CODE
+IDT_FUNCTION 9,ZERO_CODE
+IDT_FUNCTION 10,NO_ERROR_CODE
+IDT_FUNCTION 11,NO_ERROR_CODE
+IDT_FUNCTION 12,NO_ERROR_CODE
+IDT_FUNCTION 13,NO_ERROR_CODE
+IDT_FUNCTION 14,NO_ERROR_CODE
+IDT_FUNCTION 15,ZERO_CODE
+IDT_FUNCTION 16,ZERO_CODE
+IDT_FUNCTION 17,NO_ERROR_CODE
+IDT_FUNCTION 18,ZERO_CODE
+IDT_FUNCTION 19,ZERO_CODE
+IDT_FUNCTION 20,ZERO_CODE
+IDT_FUNCTION 21,NO_ERROR_CODE
+;intel reserved 22 begin
+IDT_FUNCTION 22,ZERO_CODE
+IDT_FUNCTION 23,ZERO_CODE
+IDT_FUNCTION 24,ZERO_CODE
+IDT_FUNCTION 25,ZERO_CODE
+IDT_FUNCTION 26,ZERO_CODE
+IDT_FUNCTION 27,ZERO_CODE
+IDT_FUNCTION 28,ZERO_CODE
+IDT_FUNCTION 29,ZERO_CODE
+IDT_FUNCTION 30,ZERO_CODE
+IDT_FUNCTION 31,ZERO_CODE
+;; user define0 begin
+IDT_FUNCTION 32,ZERO_CODE   ;时钟

@@ -26,6 +26,8 @@ section .text
 ;mov byte [gs:0x0e],'R'
 ;mov byte [gs:0x0f],0xA4
 
+
+;屏蔽PIC所有中断
 mov		AL,0x13			; VGA显卡，320x200x8bit
 mov		AH,0x00
 int		0x10
@@ -53,10 +55,10 @@ int		0x10
 ;    mov es:[di], al
 ;loop loop_start
 
-mov		al,0xff
-out		0x21,al
-nop						; 不断执行OUT指令
-out		0xa1,al
+;mov		al,0xff
+;out		0x21,al
+;nop						; 不断执行OUT指令
+;out		0xa1,al
 
 cli
 
@@ -94,7 +96,7 @@ mov gs, ax
 
 mov eax, KERNEL_START_SECTOR        ; kernel.bin所在的扇区号
 mov ebx, KERNEL_BIN_BASE_ADDR       ; 从磁盘读出后，写入到ebx指定的地址
-mov ecx,4    ; 读入的扇区数
+mov ecx,15    ; 读入的扇区数
 
 ;pushfd
 call rd_disk_m_32

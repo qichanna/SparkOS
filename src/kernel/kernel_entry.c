@@ -1,7 +1,7 @@
 //__asm__(".code16gcc");
 #include "utils/utils.h"
 #include "int/int.h"
-
+#include "kernel/time/time.h"
 
 #define COL8_000000		0
 #define COL8_FF0000		1
@@ -58,9 +58,9 @@ void main(void)
     draw(vram, xsize, COL8_FFFFFF, xsize - 47, ysize -  3, xsize -  4, ysize -  3);
     draw(vram, xsize, COL8_FFFFFF, xsize -  3, ysize - 24, xsize -  3, ysize -  3);
     init();
-        sti();
+    sti();
      for (;;) {
-//     	io_hlt();
+         int a = 0;
      }
 }
 
@@ -107,4 +107,5 @@ void draw(unsigned char *vram, int xsize, unsigned char c, int x0, int y0, int x
 
 void init(){
     init_interupt();
+    initTime();
 }

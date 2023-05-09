@@ -1,4 +1,0 @@
-#ifndef SPARKOS_GLOBLE_H
-#define SPARKOS_GLOBLE_H
-
-#endif //SPARKOS_GLOBLE_H
