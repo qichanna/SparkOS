@@ -1,6 +1,4 @@
 #include "time.h"
-#include "kernel/int/int.h"
-#include "kernel/utils/utils.h"
 
 void initTime(){
     init_time_control();
@@ -24,4 +22,5 @@ void init_time_control(){
 
 void clock_function(IDT_INFO info){
     int a = 0;
+    s_print('w');
 }

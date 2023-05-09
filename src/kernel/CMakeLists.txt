@@ -20,6 +20,9 @@ set(CMAKE_ASM_NASM_LINK_EXECUTABLE "${LINKER_TOOL} <LINK_FLAGS> <OBJECTS> -o <TA
 ENABLE_LANGUAGE(ASM_NASM)
 # set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${PROJECT_NAME}/asm_bin)
 
+#include_directories(
+#        .
+#)
 
 # file(GLOB C_LIST "*.S")
 # add_executable(${PROJECT_NAME} mbr.S init.S)

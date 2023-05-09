@@ -9,6 +9,12 @@ void outb(int port,int data){
     out_byte(port,data);
 }
 
+int inb(int port){
+    int data = 0;
+    asm volatile("inb %w1, %b0" : "=a" (data) : "Nd" (port));
+    return data;
+}
+
 void cli(){
     _io_cli();
 }
