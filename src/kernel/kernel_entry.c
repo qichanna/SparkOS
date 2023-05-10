@@ -2,7 +2,7 @@
 #include "utils/utils.h"
 #include "int/int.h"
 #include "kernel/time/time.h"
-#include "kernel/utils/serial_print.h"
+#include "kernel/utils/print_s.h"
 
 #define COL8_000000		0
 #define COL8_FF0000		1
@@ -109,5 +109,5 @@ void draw(unsigned char *vram, int xsize, unsigned char c, int x0, int y0, int x
 void init(){
     init_interupt();
     initTime();
-    s_print('q');
+    print_s("i am %c ok! %d! %s# %x$",'q',-956,"adgrc",29);
 }

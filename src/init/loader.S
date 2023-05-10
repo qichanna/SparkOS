@@ -96,7 +96,7 @@ mov gs, ax
 
 mov eax, KERNEL_START_SECTOR        ; kernel.bin所在的扇区号
 mov ebx, KERNEL_BIN_BASE_ADDR       ; 从磁盘读出后，写入到ebx指定的地址
-mov ecx,15    ; 读入的扇区数
+mov ecx, 9    ; 读入的扇区数
 
 ;pushfd
 call rd_disk_m_32

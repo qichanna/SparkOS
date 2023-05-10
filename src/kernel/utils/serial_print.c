@@ -46,6 +46,8 @@ void write_serial(char a) {
     outb(PORT,a);
 }
 
-void s_print(char c){
-   write_serial(c);
+void s_print(char* string){
+    while (*string != '\0'){
+        write_serial(*(string++));
+    }
 }

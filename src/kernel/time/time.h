@@ -3,7 +3,7 @@
 
 #include "kernel/int/int.h"
 #include "kernel/utils/utils.h"
-#include "kernel/utils/serial_print.h"
+#include "kernel/utils/print_s.h"
 
 void initTime();
 void init_time_control();
