@@ -22,5 +22,5 @@ void init_time_control(){
 
 void clock_function(IDT_INFO info){
     int a = 0;
-//    print_s("diffc");
+    print_s("diffc");
 }

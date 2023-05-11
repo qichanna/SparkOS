@@ -3,27 +3,16 @@
 #include "int/int.h"
 #include "kernel/time/time.h"
 #include "kernel/utils/print_s.h"
-
-#define COL8_000000		0
-#define COL8_FF0000		1
-#define COL8_00FF00		2
-#define COL8_FFFF00		3
-#define COL8_0000FF		4
-#define COL8_FF00FF		5
-#define COL8_00FFFF		6
-#define COL8_FFFFFF		7
-#define COL8_C6C6C6		8
-#define COL8_840000		9
-#define COL8_008400		10
-#define COL8_848400		11
-#define COL8_000084		12
-#define COL8_840084		13
-#define COL8_008484		14
-#define COL8_848484		15
+#include "commom/global.h"
+#include "mouse/mouse.h"
 
 void init();
 void set_color_panel();
 void draw(unsigned char*, int , unsigned char, int, int, int, int);
+// 字体
+void print_single_font(char *vram, int xsize, int x, int y, char c, char);
+void print_string(char *vram, int xsize, int x, int y, char c, char*);
+extern char font_date[4096];
 
 void main(void)
 {
@@ -36,11 +25,22 @@ void main(void)
 //        *(p + i) = i & 0x0f;
 //     }
 
+
     char *vram;
     int xsize, ysize;
     vram = (char *) 0xa0000;
     xsize = 320;
     ysize = 200;
+
+    int mx, my;
+    mx = (xsize - 16) / 2;
+    my = (ysize - 28 - 16) / 2;
+    char mcursor[256];
+
+//    static char font_A[16] = {
+//            0x00, 0x18, 0x18, 0x18, 0x18, 0x24, 0x24, 0x24,
+//            0x24, 0x7e, 0x42, 0x42, 0x42, 0xe7, 0x00, 0x00
+//    };
 
     draw(vram, xsize, COL8_008484,  0,         0,          xsize -  1, ysize - 29);
     draw(vram, xsize, COL8_C6C6C6,  0,         ysize - 28, xsize -  1, ysize - 28);
@@ -58,13 +58,19 @@ void main(void)
     draw(vram, xsize, COL8_848484, xsize - 47, ysize - 23, xsize - 47, ysize -  4);
     draw(vram, xsize, COL8_FFFFFF, xsize - 47, ysize -  3, xsize -  4, ysize -  3);
     draw(vram, xsize, COL8_FFFFFF, xsize -  3, ysize - 24, xsize -  3, ysize -  3);
+    print_string(vram, xsize, 10, 10, COL8_FFFFFF, "I am success!");
+
+    initMouse(mcursor, COL8_008484);
+    drawMouse(vram, xsize, 16, 16, mx, my, mcursor, 16);
+
     init();
-    sti();
+//    sti();
      for (;;) {
          int a = 0;
      }
 }
 
+// 设置背景色
 void set_color_panel(){
     unsigned char rgb_table[16*3] = {
             0x00, 0x00, 0x00,
@@ -106,6 +112,36 @@ void draw(unsigned char *vram, int xsize, unsigned char c, int x0, int y0, int x
     return;
 }
 
+
+// 打印字体
+void print_single_font(char *vram, int xsize, int x, int y, char c, char font)
+{
+    int i;
+    char *p, d;
+    for (i = 0; i < 16; i++) {
+        p = vram + (y + i) * xsize + x;
+        d = *(font * 16 + font_date + i);
+        if ((d & 0x80) != 0) { p[0] = c; }
+        if ((d & 0x40) != 0) { p[1] = c; }
+        if ((d & 0x20) != 0) { p[2] = c; }
+        if ((d & 0x10) != 0) { p[3] = c; }
+        if ((d & 0x08) != 0) { p[4] = c; }
+        if ((d & 0x04) != 0) { p[5] = c; }
+        if ((d & 0x02) != 0) { p[6] = c; }
+        if ((d & 0x01) != 0) { p[7] = c; }
+    }
+    return;
+}
+
+void print_string(char *vram, int xsize, int x, int y, char c, char* string){
+    while (*string != '\0'){
+        print_single_font(vram,xsize,x,y,c,*string);
+        x += 8;
+        string++;
+    }
+}
+
+// 初始化
 void init(){
     init_interupt();
     initTime();
