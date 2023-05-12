@@ -2,7 +2,7 @@
 #define SPARKOS_INT_H
 #include "commom/type.h"
 
-#define IDT_COUNT 33
+#define IDT_COUNT 34
 
 typedef struct{
     uint16 offset_low;

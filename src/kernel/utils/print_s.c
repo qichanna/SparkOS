@@ -16,6 +16,17 @@ int print_s(char* format,...){
     return 1;
 }
 
+int println_s(char* format,...){
+    char result[128];
+    char* args;
+    va_start(args,format);
+    real_print(result,format,args);
+    va_end(args);
+    s_print(result);
+    s_print("\n");
+    return 1;
+}
+
 int real_print(char* result,char* format,char* args){
     while (*format != '\0'){
         char c = *format;
@@ -50,6 +61,7 @@ int real_print(char* result,char* format,char* args){
         }
         format++;
     }
+    *result++ = '\0';
     return 1;
 }
 

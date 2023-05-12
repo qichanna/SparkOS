@@ -1,7 +1,7 @@
 global write_mem8,io_hlt,out_byte
-global _io_cli,_io_sti,_io_load_eflags,_io_store_eflags
+global _io_cli,_io_sti,_io_hlt,_io_load_eflags,_io_store_eflags
 
-io_hlt:
+_io_hlt:
 		hlt
 		ret
 
@@ -20,21 +20,21 @@ out_byte:
     ret
 
 _io_cli:
-		CLI
-		RET
+		cli
+		ret
 
 _io_sti:
-	    STI
-	    RET
+	    sti
+	    ret
 
 _io_load_eflags:
-		PUSHFD
-		POP		EAX
-		RET
+		pushfd
+		pop		EAX
+		ret
 
 _io_store_eflags:
-		MOV		EAX,[ESP+4]
-		PUSH	EAX
-		POPFD
-		RET
+		mov		EAX,[ESP+4]
+		push	EAX
+		popfd
+		ret
 

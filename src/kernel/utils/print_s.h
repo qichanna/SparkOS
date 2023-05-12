@@ -5,6 +5,7 @@
 #include "stringUtils.h"
 
 int print_s(char*,...);
+int println_s(char*,...);
 int real_print(char*,char*,char*);
 void numToStr(char**,int,int);
 

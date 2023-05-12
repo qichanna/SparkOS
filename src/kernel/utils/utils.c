@@ -2,6 +2,7 @@
 extern void out_byte(int,int);
 extern void _io_cli();
 extern void _io_sti();
+extern void _io_hlt();
 extern int _io_load_eflags();
 extern void _io_store_eflags(int);
 
@@ -21,6 +22,10 @@ void cli(){
 
 void sti(){
     _io_sti();
+}
+
+void hlt(){
+    _io_hlt();
 }
 
 int read_eflags(){

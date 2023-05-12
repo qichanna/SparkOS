@@ -5,6 +5,7 @@
 #include "kernel/utils/print_s.h"
 #include "commom/global.h"
 #include "mouse/mouse.h"
+#include "keyboard/keyboard.h"
 
 void init();
 void set_color_panel();
@@ -64,7 +65,7 @@ void main(void)
     drawMouse(vram, xsize, 16, 16, mx, my, mcursor, 16);
 
     init();
-//    sti();
+    sti();
      for (;;) {
          int a = 0;
      }
@@ -145,5 +146,18 @@ void print_string(char *vram, int xsize, int x, int y, char c, char* string){
 void init(){
     init_interupt();
     initTime();
+    initKeyboard();
     print_s("i am %c ok! %d! %s# %x$",'q',-956,"adgrc",29);
+
+    while (1){
+        cli();
+        if(isPoolEmpty()){
+            sti();
+            hlt();
+        } else{
+            int data = getChar();
+            println_s("%x",data);
+            sti();
+        }
+    }
 }

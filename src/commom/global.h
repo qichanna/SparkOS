@@ -18,4 +18,9 @@
 #define COL8_008484		14
 #define COL8_848484		15
 
+
+#define  CLOCK_INT_NO 0x20
+#define  KEYBOARD_INT_NO 0x21
+#define  MOUSE_INT_NO 0x2C
+
 #endif //SPARKOS_GLOBAL_H

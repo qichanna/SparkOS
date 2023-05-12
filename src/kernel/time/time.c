@@ -2,7 +2,7 @@
 
 void initTime(){
     init_time_control();
-    interrupt_real_fun(32, clock_function);
+    interrupt_real_fun(CLOCK_INT_NO, clock_function);
 }
 
 /*
@@ -22,5 +22,5 @@ void init_time_control(){
 
 void clock_function(IDT_INFO info){
     int a = 0;
-    print_s("diffc");
+//    println_s("diffc");
 }

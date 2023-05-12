@@ -17,7 +17,7 @@ section .text
     push fs
     push gs
 
-    mov al,0x20                   ; 中断结束命令EOI 0010000,1表示中断结束
+    mov al,0x20                   ; 中断结束命令EOI 00100000,1表示中断结束
     out 0xa0,al                   ; OCW2 主从，0X20, 0XA0
     out 0x20,al
 
@@ -70,4 +70,20 @@ IDT_FUNCTION 29,ZERO_CODE
 IDT_FUNCTION 30,ZERO_CODE
 IDT_FUNCTION 31,ZERO_CODE
 ;; user define0 begin
-IDT_FUNCTION 32,ZERO_CODE   ;时钟
+IDT_FUNCTION 0x20,ZERO_CODE   ;时钟
+IDT_FUNCTION 0x21,ZERO_CODE   ;键盘
+
+;VECTOR 0x22,ZERO	;级联用的
+;VECTOR 0x23,ZERO	;串口2对应的入口
+;VECTOR 0x24,ZERO	;串口1对应的入口
+;VECTOR 0x25,ZERO	;并口2对应的入口
+;VECTOR 0x26,ZERO	;软盘对应的入口
+;VECTOR 0x27,ZERO	;并口1对应的入口
+;VECTOR 0x28,ZERO	;实时时钟对应的入口
+;VECTOR 0x29,ZERO	;重定向
+;VECTOR 0x2a,ZERO	;保留
+;VECTOR 0x2b,ZERO	;保留
+;VECTOR 0x2c,ZERO	;ps/2鼠标
+;VECTOR 0x2d,ZERO	;fpu浮点单元异常
+;VECTOR 0x2e,ZERO	;硬盘
+;VECTOR 0x2f,ZERO	;保留
