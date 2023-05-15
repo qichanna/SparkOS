@@ -27,42 +27,33 @@ void main(void)
 //     }
 
 
-    char *vram;
-    int xsize, ysize;
-    vram = (char *) 0xa0000;
-    xsize = 320;
-    ysize = 200;
+    char *vram = (char *) 0xa0000;
 
-    int mx, my;
-    mx = (xsize - 16) / 2;
-    my = (ysize - 28 - 16) / 2;
-    char mcursor[256];
 
 //    static char font_A[16] = {
 //            0x00, 0x18, 0x18, 0x18, 0x18, 0x24, 0x24, 0x24,
 //            0x24, 0x7e, 0x42, 0x42, 0x42, 0xe7, 0x00, 0x00
 //    };
 
-    draw(vram, xsize, COL8_008484,  0,         0,          xsize -  1, ysize - 29);
-    draw(vram, xsize, COL8_C6C6C6,  0,         ysize - 28, xsize -  1, ysize - 28);
-    draw(vram, xsize, COL8_FFFFFF,  0,         ysize - 27, xsize -  1, ysize - 27);
-    draw(vram, xsize, COL8_C6C6C6,  0,         ysize - 26, xsize -  1, ysize -  1);
+    draw(vram, XSIZE, COL8_008484,  0,         0,          XSIZE -  1, YSIZE - 29);
+    draw(vram, XSIZE, COL8_C6C6C6,  0,         YSIZE - 28, XSIZE -  1, YSIZE - 28);
+    draw(vram, XSIZE, COL8_FFFFFF,  0,         YSIZE - 27, XSIZE -  1, YSIZE - 27);
+    draw(vram, XSIZE, COL8_C6C6C6,  0,         YSIZE - 26, XSIZE -  1, YSIZE -  1);
 
-    draw(vram, xsize, COL8_FFFFFF,  3,         ysize - 24, 59,         ysize - 24);
-    draw(vram, xsize, COL8_FFFFFF,  2,         ysize - 24,  2,         ysize -  4);
-    draw(vram, xsize, COL8_848484,  3,         ysize -  4, 59,         ysize -  4);
-    draw(vram, xsize, COL8_848484, 59,         ysize - 23, 59,         ysize -  5);
-    draw(vram, xsize, COL8_000000,  2,         ysize -  3, 59,         ysize -  3);
-    draw(vram, xsize, COL8_000000, 60,         ysize - 24, 60,         ysize -  3);
+    draw(vram, XSIZE, COL8_FFFFFF,  3,         YSIZE - 24, 59,         YSIZE - 24);
+    draw(vram, XSIZE, COL8_FFFFFF,  2,         YSIZE - 24,  2,         YSIZE -  4);
+    draw(vram, XSIZE, COL8_848484,  3,         YSIZE -  4, 59,         YSIZE -  4);
+    draw(vram, XSIZE, COL8_848484, 59,         YSIZE - 23, 59,         YSIZE -  5);
+    draw(vram, XSIZE, COL8_000000,  2,         YSIZE -  3, 59,         YSIZE -  3);
+    draw(vram, XSIZE, COL8_000000, 60,         YSIZE - 24, 60,         YSIZE -  3);
 
-    draw(vram, xsize, COL8_848484, xsize - 47, ysize - 24, xsize -  4, ysize - 24);
-    draw(vram, xsize, COL8_848484, xsize - 47, ysize - 23, xsize - 47, ysize -  4);
-    draw(vram, xsize, COL8_FFFFFF, xsize - 47, ysize -  3, xsize -  4, ysize -  3);
-    draw(vram, xsize, COL8_FFFFFF, xsize -  3, ysize - 24, xsize -  3, ysize -  3);
-    print_string(vram, xsize, 10, 10, COL8_FFFFFF, "I am success!");
+    draw(vram, XSIZE, COL8_848484, XSIZE - 47, YSIZE - 24, XSIZE -  4, YSIZE - 24);
+    draw(vram, XSIZE, COL8_848484, XSIZE - 47, YSIZE - 23, XSIZE - 47, YSIZE -  4);
+    draw(vram, XSIZE, COL8_FFFFFF, XSIZE - 47, YSIZE -  3, XSIZE -  4, YSIZE -  3);
+    draw(vram, XSIZE, COL8_FFFFFF, XSIZE -  3, YSIZE - 24, XSIZE -  3, YSIZE -  3);
+    print_string(vram, XSIZE, 10, 10, COL8_FFFFFF, "I am success!");
 
-    initMouse(mcursor, COL8_008484);
-    drawMouse(vram, xsize, 16, 16, mx, my, mcursor, 16);
+
 
     init();
     sti();
@@ -146,17 +137,22 @@ void print_string(char *vram, int xsize, int x, int y, char c, char* string){
 void init(){
     init_interupt();
     initTime();
+    initMouse();
     initKeyboard();
-    print_s("i am %c ok! %d! %s# %x$",'q',-956,"adgrc",29);
+//    print_s("i am %c ok! %d! %s# %x$",'q',-956,"adgrc",29);
 
     while (1){
         cli();
-        if(isPoolEmpty()){
+        if(isPoolEmpty() && isMousePoolEmpty()){
             sti();
             hlt();
-        } else{
+        } else if(!isPoolEmpty()){
             int data = getChar();
             println_s("%x",data);
+            sti();
+        } else if(!isMousePoolEmpty()){
+            int data = getMouseChar();
+//            println_s("%x",data);
             sti();
         }
     }

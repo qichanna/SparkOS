@@ -7,8 +7,6 @@
 #include "../../commom/global.h"
 #include "../utils/print_s.h"
 
-#define KEYBOARD_PORT 0x60
-
 struct KEYB0ARD_POOL{
     unsigned char buf[32];
     int size;

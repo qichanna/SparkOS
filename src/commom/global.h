@@ -22,5 +22,8 @@
 #define  CLOCK_INT_NO 0x20
 #define  KEYBOARD_INT_NO 0x21
 #define  MOUSE_INT_NO 0x2C
+#define XSIZE 320
+#define YSIZE 200
 
+#define PORT_DATA_8042 0X60
 #endif //SPARKOS_GLOBAL_H

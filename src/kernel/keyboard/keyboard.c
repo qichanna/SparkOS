@@ -17,8 +17,8 @@ void ketboard_int_function(IDT_INFO info){
 
 void putChar(){
     if(pool.free > 0){
-        int code = inb(KEYBOARD_PORT);
-//        println_s("code: %x",code);
+        int code = inb(PORT_DATA_8042);
+//        println_s("key_code: %x",code);
         pool.buf[pool.start++] = code;
         pool.free--;
         if(pool.start == pool.size){
