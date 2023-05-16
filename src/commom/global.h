@@ -26,4 +26,7 @@
 #define YSIZE 200
 
 #define PORT_DATA_8042 0X60
+
+static unsigned char *vram = (char *) 0xa0000;
+
 #endif //SPARKOS_GLOBAL_H

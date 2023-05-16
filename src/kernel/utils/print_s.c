@@ -47,12 +47,18 @@ int real_print(char* result,char* format,char* args){
                     break;
                 case 'd':
                     num = va_arg(args,int);
+                    if(num == 0){
+                        *result++ = '0';
+                    }
                     numToStr(&result,num,10);
                     break;
                 case 'x':
                     num = va_arg(args,int);
                     *result++ = '0';
                     *result++ = 'x';
+                    if(num == 0){
+                        *result++ = '0';
+                    }
                     numToStr(&result,num,16);
                     break;
                 default:

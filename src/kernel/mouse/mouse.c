@@ -2,7 +2,7 @@
 
 struct MOUSE_POOL mousePool;
 struct MOUSE_INFO mouseInfo;
-char *vram = (char *) 0xa0000;
+
 int mx = (XSIZE - 16) / 2;
 int my = (YSIZE - 28 - 16) / 2;
 char mcursor[256];
@@ -97,8 +97,8 @@ void mouse_int_function(){
 
 void putMouseChar(){
     if(mousePool.free > 0){
-        int code = inb(PORT_DATA_8042);
-        println_s("mouse_code: %x  %d",code, code);
+        unsigned int code = inb(PORT_DATA_8042);
+//        println_s("mouse_code: %x  %d",code, code);
         mousePool.buf[mousePool.start++] = code;
         mousePool.free--;
         if(mousePool.start == mousePool.size){
@@ -109,8 +109,8 @@ void putMouseChar(){
 
 int getMouseChar(){
     if(mousePool.free < mousePool.size){
-        unsigned char data = mousePool.buf[mousePool.end++];
-        println_s("getMouseChar: %x  %d  %d",data, data,mousePool.free);
+        unsigned int data = mousePool.buf[mousePool.end++];
+//        println_s("getMouseChar: %x  %d  %d",data, data,mousePool.free);
         if(mousePool.end == mousePool.size){
             mousePool.end = 0;
         }
@@ -120,30 +120,30 @@ int getMouseChar(){
             if(data == 0xfa){
                 mouseInfo.phase = 1;
             }
-            println_s("11111");
         } else if(mouseInfo.phase == 1){
             if((data & 0xc8) == 0x08){ // 高4位值0-3，低4位值8-F
                 mouseInfo.info[0] = data;
                 mouseInfo.phase = 2;
             }
-            println_s("222222222");
         } else if(mouseInfo.phase == 2){
             mouseInfo.info[1] = data;
             mouseInfo.phase = 3;
-            println_s("33333333");
         } else if(mouseInfo.phase == 3){
             mouseInfo.info[2] = data;
             mouseInfo.phase = 1;
             mouseInfo.click = mouseInfo.info[0] & 0x07;
             mouseInfo.x = mouseInfo.info[1];
             mouseInfo.y = mouseInfo.info[2];
-            if((mouseInfo.x & 0x10) != 0){
+            if((mouseInfo.info[0] & 0x10) != 0){
                 mouseInfo.x |= 0xffffff00;
             }
-            if((mouseInfo.y & 0x20) != 0){
+            if((mouseInfo.info[0] & 0x20) != 0){
                 mouseInfo.y |= 0xffffff00;
             }
             mouseInfo.y = -mouseInfo.y;
+//            draw(vram, XSIZE, COL8_008484, 32, 16, 32 + 15 * 8 - 1, 31);
+//            print_string(vram, XSIZE, 32, 16, COL8_FFFFFF, "sssss");
+            draw(vram, XSIZE, COL8_008484, mx, my, mx + 15, my + 15); // 隐藏鼠标
 
             mx += mouseInfo.x;
             my += mouseInfo.y;
@@ -151,9 +151,11 @@ int getMouseChar(){
             if(my < 0) my = 0;
             if(mx > XSIZE - 16) mx = XSIZE - 16;
             if(my > YSIZE - 16) my = YSIZE - 16;
-            println_s("xxxxxx: %d %d",mx,mouseInfo.x);
-            println_s("yyyyyyy: %d  %d", my,mouseInfo.y);
-            drawMouse(vram, XSIZE, 16, 16, mx, my, mcursor, 16);
+
+//            draw(vram, XSIZE, COL8_008484, 0, 0, 79, 15);
+//            print_string(vram, XSIZE, 0, 0, COL8_FFFFFF, "sssss");
+            initFont();// 先重绘文字
+            drawMouse(vram, XSIZE, 16, 16, mx, my, mcursor, 16);// 在重绘鼠标
         }
         return data;
     }

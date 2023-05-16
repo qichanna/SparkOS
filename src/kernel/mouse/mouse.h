@@ -5,6 +5,8 @@
 #include "commom/global.h"
 #include "kernel/int/int.h"
 #include "kernel/utils/print_s.h"
+#include "kernel/background/background.h"
+#include "kernel/font/font.h"
 
 struct MOUSE_POOL{
     unsigned char buf[128];
