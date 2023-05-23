@@ -19,14 +19,19 @@
 #define COL8_848484		15
 
 
-#define  CLOCK_INT_NO 0x20
-#define  KEYBOARD_INT_NO 0x21
-#define  MOUSE_INT_NO 0x2C
+#define CLOCK_INT_NO 0x20
+#define KEYBOARD_INT_NO 0x21
+#define MOUSE_INT_NO 0x2C
+//#define XSIZE 1024
+//#define YSIZE 768
+
 #define XSIZE 320
 #define YSIZE 200
 
 #define PORT_DATA_8042 0X60
 
-static unsigned char *vram = (char *) 0xa0000;
+static char *vram = (char *) 0xa0000;
+//static char *vram = (char *) 0xfd000000;
+//static char *vram = (char *) 0xf000d431;
 
 #endif //SPARKOS_GLOBAL_H

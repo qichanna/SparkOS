@@ -6,7 +6,7 @@ void initBackground(){
 }
 
 void drawBackground(){
-    draw(vram, XSIZE, COL8_008484,  0,         0,          XSIZE -  1, YSIZE - 29);
+    draw(vram, XSIZE, COL8_008484,  0,         0,          XSIZE - 1, YSIZE - 29);
     draw(vram, XSIZE, COL8_C6C6C6,  0,         YSIZE - 28, XSIZE -  1, YSIZE - 28);
     draw(vram, XSIZE, COL8_FFFFFF,  0,         YSIZE - 27, XSIZE -  1, YSIZE - 27);
     draw(vram, XSIZE, COL8_C6C6C6,  0,         YSIZE - 26, XSIZE -  1, YSIZE -  1);
@@ -56,7 +56,7 @@ void set_color_panel(){
     return;
 }
 
-void draw(unsigned char *vram, int xsize, unsigned char c, int x0, int y0, int x1, int y1)
+void draw(char *vram, int xsize, unsigned char c, int x0, int y0, int x1, int y1)
 {
     int x, y;
     for (y = y0; y <= y1; y++) {
@@ -65,3 +65,19 @@ void draw(unsigned char *vram, int xsize, unsigned char c, int x0, int y0, int x
     }
     return;
 }
+
+/*void draw(char *vram, int xsize, unsigned char c, int x0, int y0, int x1, int y1)
+{
+    int x, y;
+    int bytesPerRow = 3; // 24-bit
+    for (y = y0; y <= y1; y++) {
+        char *ybase = vram + (y * xsize * bytesPerRow);
+        for (x = x0; x <= x1; x++){
+            char *base = ybase + (x * bytesPerRow);
+            base[0] = 0x99;
+            base[1] = 0x88;
+            base[2] = 0x77;
+        }
+    }
+    return;
+}*/

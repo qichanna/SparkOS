@@ -26,16 +26,62 @@ section .text
 ;mov byte [gs:0x0e],'R'
 ;mov byte [gs:0x0f],0xA4
 
-
-;屏蔽PIC所有中断
-mov		AL,0x13			; VGA显卡，320x200x8bit
-mov		AH,0x00
-int		0x10
-
-;mov al,0x13  ;VGA模式
-;mov ah,0x00
-;int 0x10
+;  1024*768  begin
+;MOV		AX,0x9000
+;		MOV		ES,AX
+;		MOV		DI,0
+;		MOV		AX,0x4f00
+;		INT		0x10
+;		CMP		AX,0x004f
+;		JNE		scrn320
 ;
+;		MOV		AX,[ES:DI+4]
+;		CMP		AX,0x0200
+;		JB		scrn320
+;
+;		MOV		CX,0x0118
+;		MOV		AX,0x4f01
+;		INT		0x10
+;		CMP		AX,0x004f
+;		JNE		scrn320
+;
+;		;CMP		BYTE [ES:DI+0x19],16
+;		;JNE		scrn320
+;		;CMP		BYTE [ES:DI+0x1b],4
+;		;JNE		scrn320
+;		;MOV		AX,[ES:DI+0x00]
+;		;AND		AX,0x0080
+;		;JZ		scrn320
+;
+;		MOV		BX,0x0118+0x4000
+;		MOV		AX,0x4f02
+;		INT		0x10
+;		;MOV		BYTE [VMODE],8
+;		MOV		AX,[ES:DI+0x10] ; pitch
+;		MOV		AX,[ES:DI+0x12]
+;		MOV		AX,[ES:DI+0x12]
+;		MOV		AX,[ES:DI+0x1b]
+;		MOV		AX,[ES:DI+0x19] ;色深  1XX，XX为16进制
+;		;MOV		[SCRNX],AX
+;		MOV		AX,[ES:DI+0x14]
+;		;MOV		[SCRNY],AX
+;		MOV		EAX,[ES:DI+0x28]
+;		;MOV		[VRAM],EAX
+;		JMP		normal
+;
+;  1024*768  end
+
+scrn320:
+mov al,0x13  ;VGA模式  320 X 200 X 8bit
+mov ah,0x00
+int 0x10
+
+;mov		BX,0x4118			; VGA显卡，1024x768x24/32bit
+;mov		AX,0x4f02
+;int		0x10
+
+normal:
+;屏蔽PIC所有中断
 ;mov ax, 0xa000
 ;mov es, ax        ; 将段地址存储在 ES 寄存器中
 ;xor di, di        ; 将 DI 寄存器清零
@@ -96,7 +142,7 @@ mov gs, ax
 
 mov eax, KERNEL_START_SECTOR        ; kernel.bin所在的扇区号
 mov ebx, KERNEL_BIN_BASE_ADDR       ; 从磁盘读出后，写入到ebx指定的地址
-mov ecx, 26    ; 读入的扇区数
+mov ecx,26    ; 读入的扇区数
 
 ;pushfd
 call rd_disk_m_32

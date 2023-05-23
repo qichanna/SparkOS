@@ -89,6 +89,38 @@ void drawMouse(char *vram, int vxsize, int pxsize,
     return;
 }
 
+/*void drawMouse(char *vram, int vxsize, int pxsize,
+               int pysize, int px0, int py0, char *buf, int bxsize)
+{
+    char *base = vram;
+    int x, y;
+    int bytesPerRow = 3; // 24-bit
+    for (y = 0; y < pysize; y++) {
+        char *ybase = vram + ((py0+y) * vxsize * bytesPerRow);
+        for (x = 0; x < pxsize; x++) {
+            base = ybase + ((px0+x) * bytesPerRow);
+            switch (buf[y * bxsize + x]) {
+                case COL8_000000:
+                    base[0] = 0xff;
+                    base[1] = 0xff;
+                    base[2] = 0xff;
+                    break;
+                case COL8_FFFFFF:
+                    base[0] = 0x00;
+                    base[1] = 0x00;
+                    base[2] = 0x00;
+                    break;
+                default:
+                    base[0] = 0x99;
+                    base[1] = 0x88;
+                    base[2] = 0x77;
+                    break;
+            }
+        }
+    }
+    return;
+}*/
+
 void mouse_int_function(){
     putMouseChar();
 //    println_s("mouse: %x",data);
