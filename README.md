@@ -50,8 +50,8 @@
      不过开发出来还是很有成就感的,可以看到我们主要现在还是模仿windows的，
      最下面有一个toolbar，左边有个按键，点击后会显示进一步的窗口，
      这些功能目前还都没完成，后面会陆续添加上。
-
-![输入图片说明](img/pic.jpg)
+     
+![pic](https://github.com/qichanna/SparkOS/assets/6308765/c5cbc701-d41d-4d29-abee-474cad74d8d7)
 
 
 
