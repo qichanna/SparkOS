@@ -42,7 +42,7 @@
 
      **字库** ：字库目前只支持英文和数字，汉字的话由于数量太多了，所以暂时先不考虑，
      后期再看。具体的字库是通过开发了一个java的程序来实现的，
-     源码在这里：https://gitee.com/qichanna/MakeFont](https://github.com/qichanna/MakeFont
+     源码在这里：https://github.com/qichanna/MakeFont
 
      目前来说就实现了以上部分，后面会继续开发的，但是由于个人时间不确定，
      所以说准备做长期开发的准备，甚至终身开发的准备，哈哈，
